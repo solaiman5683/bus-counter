@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
 	const [tripsModalShow, setTripsModalShow] = React.useState(false);
@@ -9,8 +10,20 @@ const Dashboard = () => {
 
 	const handleAddTripsToDate = e => {
 		e.preventDefault();
-		console.log(e.target.trip.value);
-		console.log(e.target.date.value);
+		function tConvert(time) {
+			// Check correct time format and split into components
+			time = time
+				.toString()
+				.match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+			if (time.length > 1) {
+				// If time format correct
+				time = time.slice(1); // Remove full string match value
+				time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+				time[0] = +time[0] % 12 || 12; // Adjust hours
+			}
+			return time.join('');
+		}
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/add/date', {
 			method: 'POST',
 			headers: {
@@ -18,7 +31,7 @@ const Dashboard = () => {
 			},
 			body: JSON.stringify({
 				trip_name: e.target.trip.value,
-				trip_time: e.target.time.value,
+				trip_time: tConvert(e.target.time.value),
 				trip_date: e.target.date.value,
 			}),
 		})
@@ -28,8 +41,26 @@ const Dashboard = () => {
 				setDateModalShow(false);
 				setDateTrip(prev => {
 					const f = prev.find(item => item.trip_date === e.target.date.value);
-					f.trips.push(e.target.trip.value);
-					return [...prev];
+					if (f) {
+						f?.trips.push({
+							trip_name: e.target.trip.value,
+							trip_time: tConvert(e.target.time.value),
+						});
+						return [...prev];
+					} else {
+						return [
+							...prev,
+							{
+								trip_date: e.target.date.value,
+								trips: [
+									{
+										trip_name: e.target.trip.value,
+										trip_time: tConvert(e.target.time.value),
+									},
+								],
+							},
+						];
+					}
 				});
 			});
 	};
@@ -72,7 +103,8 @@ const Dashboard = () => {
 				.then(res => res.json())
 				.then(data => {
 					console.log(data);
-					setDateTrip(prev => prev.filter(trip => trip.id !== id));
+					const newTrips = dateTrip.filter(item => item._id !== id);
+					setDateTrip(newTrips);
 				});
 		}
 	};
@@ -96,6 +128,22 @@ const Dashboard = () => {
 		<>
 			<div className='bg-secondary vh-100 d-flex justify-content-center align-items-center'>
 				<div className='w-75 bg-white shadow-lg rounded pt-4'>
+					<p>
+						<Link to='/' className=' btn'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								className='h-5 w-5'
+								viewBox='0 0 20 20'
+								fill='currentColor'>
+								<path
+									fillRule='evenodd'
+									d='M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
+									clipRule='evenodd'
+								/>
+							</svg>
+							Back Home
+						</Link>
+					</p>
 					<h2 className='text-center mb-4'>Manage Trips</h2>
 					<p style={{ textAlign: 'right' }}>
 						<button
@@ -126,7 +174,9 @@ const Dashboard = () => {
 									<td>
 										<ul>
 											{date.trips.map((trip, index) => (
-												<li key={index}>{trip}</li>
+												<li key={index}>
+													{trip.trip_name} - {trip.trip_time}
+												</li>
 											))}
 										</ul>
 									</td>

@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
 			setIsAuthenticated(true);
 			setLoading(false);
 		}
+		setLoading(false);
 	}, []);
 	return (
 		<Auth.Provider
