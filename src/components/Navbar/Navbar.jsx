@@ -8,9 +8,9 @@ const Navbar = () => {
 		<div>
 			<nav className='navbar navbar-expand-lg navbar-dark bg-transparent'>
 				<div className='container'>
-					<a className='navbar-brand' href='#'>
+					<Link className='navbar-brand' to='/'>
 						<img src={logo} alt='' width='150px' />
-					</a>
+					</Link>
 					<button
 						className='navbar-toggler'
 						type='button'
@@ -26,7 +26,7 @@ const Navbar = () => {
 							<li className='nav-item dropdown '>
 								<a
 									className='nav-link active dropdown-toggle'
-									href='#'
+									href='/'
 									id='navbarDropdownMenuLink'
 									role='button'
 									data-bs-toggle='dropdown'
@@ -37,14 +37,14 @@ const Navbar = () => {
 									className='dropdown-menu dropdown-box'
 									aria-labelledby='navbarDropdownMenuLink'>
 									<li>
-										<a className='dropdown-item' href='#'>
+									<Link className='dropdown-item' to='/user-login'>
 											User Login
-										</a>
+										</Link>
 									</li>
 									<li>
-									<Link className='dropdown-item' to='/admin-login'>
-									Admin Login
-								</Link>
+										<Link className='dropdown-item' to='/admin-login'>
+											Admin Login
+										</Link>
 									</li>
 								</ul>
 							</li>

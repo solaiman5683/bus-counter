@@ -1,14 +1,24 @@
 import React from 'react';
-import { useAuth } from '../../Contexts/AdminContext';
+import { useNavigate } from 'react-router-dom';
+import { useData } from '../../Contexts/DataContext';
+// import { useAuth } from '../../Contexts/AdminContext';
 import Navbar from '../Navbar/Navbar';
 import './Home.css';
 
 const Home = () => {
 	const [trips, setTrips] = React.useState([]);
+	const { setSearchTrips } = useData();
+	const navigate = useNavigate();
+
 	const handleSubmit = e => {
 		e.preventDefault();
 		console.log(e.target.trip.value);
 		console.log(e.target.date.value);
+		setSearchTrips({
+			trip: e.target.trip.value,
+			date: e.target.date.value
+		});
+		navigate('/search');
 	};
 	React.useEffect(() => {
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/all')

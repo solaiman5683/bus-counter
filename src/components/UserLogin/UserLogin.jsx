@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './admin.module.css';
+import styles from './style.module.css';
 import { Link, Navigate } from 'react-router-dom';
-import { useAuth } from '../../Contexts/AdminContext';
 import Swal from 'sweetalert2';
+import { useAuth } from '../../Contexts/AdminContext';
 
-const Admin = () => {
-	const { user, setUser } = useAuth();
+const UserLogin = () => {
+    const { user, setUser } = useAuth();
 
 	if (user) {
 		return (
@@ -35,16 +35,7 @@ const Admin = () => {
 					icon: 'success',
 				});
 				setUser(data.user);
-				localStorage.setItem('user', JSON.stringify(data.user));
-			})
-			.catch(err => {
-				Swal.fire({
-					title: 'Login Failed!',
-					text: 'Please check your email and password.',
-					icon: 'error',
-				});
-			}
-			);
+			});
 	};
 	return (
 		<div className={styles.container}>
@@ -69,32 +60,22 @@ const Admin = () => {
 						margin: '20px 0',
 						textTransform: 'uppercase',
 					}}>
-					Login to Admin Panel
+					Login as an User
 				</h3>
 				<form className={styles.form} onSubmit={handleLogin}>
 					<div>
 						<label htmlFor='email'>Email *</label>
-						<input
-							type='email'
-							placeholder='Enter Your Email'
-							name='email'
-							required
-						/>
+						<input type='email' placeholder='Enter Your Email' name='email' required />
 					</div>
 					<div>
 						<label htmlFor='password'>Password *</label>
-						<input
-							type='password'
-							placeholder='Enter Your Password'
-							name='password'
-							required
-						/>
-					</div>
-					<input type='submit' value='Login' />
+						<input type='password' placeholder='Enter Your Password' name='password' required />
+                    </div>
+                    <input type="submit" value='Login' />
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default Admin;
+export default UserLogin;

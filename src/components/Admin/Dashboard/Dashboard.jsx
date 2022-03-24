@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 const Dashboard = () => {
 	const [tripsModalShow, setTripsModalShow] = React.useState(false);
@@ -18,13 +18,19 @@ const Dashboard = () => {
 			},
 			body: JSON.stringify({
 				trip_name: e.target.trip.value,
+				trip_time: e.target.time.value,
 				trip_date: e.target.date.value,
 			}),
 		})
 			.then(res => res.json())
 			.then(data => {
-                console.log(data);
-                setDateModalShow(false);
+				console.log(data);
+				setDateModalShow(false);
+				setDateTrip(prev => {
+					const f = prev.find(item => item.trip_date === e.target.date.value);
+					f.trips.push(e.target.trip.value);
+					return [...prev];
+				});
 			});
 	};
 
@@ -43,9 +49,32 @@ const Dashboard = () => {
 			.then(res => res.json())
 			.then(data => {
 				console.log(data);
-                setTrips(prev => [...prev, e.target.trip.value]);
-                setTripsModalShow(false);
+				setTrips([...trips, { trip_name: e.target.trip.value }]);
+				console.log(trips);
+				setTripsModalShow(false);
 			});
+	};
+
+	const handleDeleteTrips = id => {
+		const confirm = window.confirm(
+			'Are you sure you want to delete this trip?'
+		);
+		if (confirm) {
+			fetch(
+				`https://tranquil-wildwood-98525.herokuapp.com/trips/delete/date/${id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			)
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+					setDateTrip(prev => prev.filter(trip => trip.id !== id));
+				});
+		}
 	};
 
 	React.useEffect(() => {
@@ -94,15 +123,17 @@ const Dashboard = () => {
 								<tr key={index}>
 									<th scope='row'>{index + 1}</th>
 									<td>{date.trip_date}</td>
-                                    <td>
-                                        <ul>
-                                            {date.trips.map((trip, index) => (
-                                                <li key={index}>{trip}</li>
-                                            ))}
-                                        </ul>
-                                    </td>
 									<td>
-										<button className='btn btn-danger rounded-pill mx-2'>
+										<ul>
+											{date.trips.map((trip, index) => (
+												<li key={index}>{trip}</li>
+											))}
+										</ul>
+									</td>
+									<td>
+										<button
+											onClick={() => handleDeleteTrips(date._id)}
+											className='btn btn-danger rounded-pill mx-2'>
 											Delete
 										</button>
 									</td>
@@ -162,7 +193,14 @@ const Dashboard = () => {
 							className='form-control'
 							required
 						/>
-
+						<br />
+						<input
+							placeholder='Enter Time'
+							name='time'
+							type='time'
+							className='form-control'
+							required
+						/>
 						<br />
 						<select name='trip' className='form-control' required>
 							<option
