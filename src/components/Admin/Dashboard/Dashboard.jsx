@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
 	const [tripsModalShow, setTripsModalShow] = React.useState(false);
@@ -126,153 +126,47 @@ const Dashboard = () => {
 	}, []);
 	return (
 		<>
-			<div className='bg-secondary vh-100 d-flex justify-content-center align-items-center'>
-				<div className='w-75 bg-white shadow-lg rounded pt-4'>
-					<p>
-						<Link to='/' className=' btn'>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								className='h-5 w-5'
-								viewBox='0 0 20 20'
-								fill='currentColor'>
-								<path
-									fillRule='evenodd'
-									d='M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
-									clipRule='evenodd'
-								/>
-							</svg>
-							Back Home
-						</Link>
-					</p>
-					<h2 className='text-center mb-4'>Manage Trips</h2>
-					<p style={{ textAlign: 'right' }}>
-						<button
-							className='btn btn-primary rounded-pill mx-2'
-							onClick={() => setTripsModalShow(true)}>
-							Add New Trips
-						</button>
-						<button
-							className='btn btn-primary rounded-pill mx-2'
-							onClick={() => setDateModalShow(true)}>
-							Add Trips to Date
-						</button>
-					</p>
-					<table class='table table-striped'>
-						<thead>
-							<tr>
-								<th scope='col'>#</th>
-								<th scope='col'>Date</th>
-								<th scope='col'>Trips</th>
-								<th scope='col'>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{dateTrip.map((date, index) => (
-								<tr key={index}>
-									<th scope='row'>{index + 1}</th>
-									<td>{date.trip_date}</td>
-									<td>
-										<ul>
-											{date.trips.map((trip, index) => (
-												<li key={index}>
-													{trip.trip_name} - {trip.trip_time}
-												</li>
-											))}
-										</ul>
-									</td>
-									<td>
-										<button
-											onClick={() => handleDeleteTrips(date._id)}
-											className='btn btn-danger rounded-pill mx-2'>
-											Delete
-										</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+			<div className='container-fluid'>
+				<div className='row'>
+					<nav
+						id='sidebarMenu'
+						className='col-md-3 col-lg-2 d-md-block bg-light sidebar collapse'>
+						<div className='position-sticky pt-3'>
+							<ul className='nav flex-column vh-100'>
+								<li className='nav-item'>
+									<Link to='/' className='nav-link'>
+										<i className='fas fa-home mr-2'></i> Home
+									</Link>
+								</li>
+								<li className='nav-item'>
+									<Link to='/' className='nav-link'>
+									<i class="fa-solid fa-globe"></i> Manage Trips
+									</Link>
+								</li>
+								<li className='nav-item'>
+									<Link to='/' className='nav-link'>
+										<i className='fas fa-home mr-2'></i> Manage Bookings
+									</Link>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<main className='col-md-9 ms-sm-auto col-lg-10 px-md-4'>
+						<div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom'>
+							<h1 className='h2'>Dashboard</h1>
+							<div className='btn-toolbar mb-2 mb-md-0'>
+								<button
+									type='button'
+									className='btn btn-sm btn-outline-secondary'>
+									Logout
+								</button>
+							</div>
+						</div>
+						<Outlet />
+					</main>
 				</div>
 			</div>
-			<Modal
-				show={tripsModalShow}
-				onHide={() => setTripsModalShow(false)}
-				size='lg'
-				aria-labelledby='contained-modal-title-vcenter'
-				centered>
-				<Modal.Header closeButton>
-					<Modal.Title id='contained-modal-title-vcenter'>
-						Add New Trips
-					</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<form onSubmit={handleAddTrips}>
-						<div className='form-group'>
-							<label htmlFor='exampleInputEmail1'>Trip Name</label>
-							<input
-								type='text'
-								className='form-control'
-								name='trip'
-								required
-								aria-describedby='emailHelp'
-								placeholder='Enter Trip Name'
-							/>
-						</div>
-						<button className='btn btn-primary text-uppercase form-control mt-4'>
-							Add
-						</button>
-					</form>
-				</Modal.Body>
-			</Modal>
-			<Modal
-				show={dateModalShow}
-				onHide={() => setDateModalShow(false)}
-				size='lg'
-				aria-labelledby='contained-modal-title-vcenter'
-				centered>
-				<Modal.Header closeButton>
-					<Modal.Title id='contained-modal-title-vcenter'>
-						Add Trips to Date
-					</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<form onSubmit={handleAddTripsToDate}>
-						<input
-							placeholder='Date'
-							name='date'
-							type='date'
-							className='form-control'
-							required
-						/>
-						<br />
-						<input
-							placeholder='Enter Time'
-							name='time'
-							type='time'
-							className='form-control'
-							required
-						/>
-						<br />
-						<select name='trip' className='form-control' required>
-							<option
-								hidden
-								className='text-primary'
-								placeholder='trip'
-								value='your favorite trip'>
-								Your favorite trip
-							</option>
-							{trips?.map(trip => (
-								<option key={trip._id} value={trip.trip_name}>
-									{trip.trip_name}
-								</option>
-							))}
-						</select>
-
-						<button className='btn btn-primary text-uppercase form-control mt-4'>
-							Add
-						</button>
-					</form>
-				</Modal.Body>
-			</Modal>
 		</>
 	);
 };

@@ -15,3 +15,17 @@ code {
 *{
   box-sizing: border-box;
 }
+
+.pointer{
+  cursor: pointer;
+}
+
+.sit-item{
+  background: rgb(117, 117, 117) ;
+}
+.sit-active{
+  background: green ;
+}
+.sit-selected{
+  background: rgb(0, 87, 128) !important;
+}
