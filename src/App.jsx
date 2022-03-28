@@ -8,6 +8,7 @@ import UserLogin from './components/UserLogin/UserLogin';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Search from './components/Search/Search';
 import ManageTrips from './components/Admin/Dashboard/ManageTrips';
+import ManageBookings from './components/Admin/Dashboard/ManageBookings';
 // import 'sweetalert2/src/sweetalert2.scss'
 
 function App() {
@@ -26,8 +27,9 @@ function App() {
 						</PrivateRoute>
 					}
 				>
-					<Route path='*' element={<Navigate to='manage' />} />
-					<Route path='manage' element={<ManageTrips />} />
+					<Route path='*' element={<Navigate to='manage-trips' />} />
+					<Route path='manage-trips' element={<ManageTrips />} />
+					<Route path='manage-bookings' element={<ManageBookings />} />
 				</Route>
 				<Route path='search' element={<Search />} />
 			</Routes>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
-const ManageTrips = () => {
+const ManageBookings = () => {
 	const [tripsModalShow, setTripsModalShow] = React.useState(false);
 	const [dateModalShow, setDateModalShow] = React.useState(false);
 	const [trips, setTrips] = React.useState([]);
@@ -136,9 +136,9 @@ const ManageTrips = () => {
 	}, []);
 	return (
 		<>
-			<div className='bg-white shadow-lg rounded p-2'>
-				<h2 className='text-center mb-4'>Manage Trips</h2>
-				<p style={{ textAlign: 'right' }}>
+			<div className='bg-white shadow-lg rounded pt-4'>
+				<h2 className='text-center mb-4'>Manage Bookings</h2>
+				{/* <p style={{ textAlign: 'right' }}>
 					<button
 						className='btn btn-primary rounded-pill mx-2'
 						onClick={() => setTripsModalShow(true)}>
@@ -149,8 +149,8 @@ const ManageTrips = () => {
 						onClick={() => setDateModalShow(true)}>
 						Add Trips to Date
 					</button>
-				</p>
-				<table class='table table-hover-striped'>
+				</p> */}
+				<table class='table table-striped'>
 					<thead>
 						<tr>
 							<th scope='col'>#</th>
@@ -174,6 +174,11 @@ const ManageTrips = () => {
 									</ul>
 								</td>
 								<td>
+									<button
+										onClick={() => handleDeleteTrips(date._id)}
+										className='btn btn-info text-white rounded-pill mx-2'>
+										Approve
+									</button>
 									<button
 										onClick={() => handleDeleteTrips(date._id)}
 										className='btn btn-danger rounded-pill mx-2'>
@@ -269,4 +274,4 @@ const ManageTrips = () => {
 	);
 };
 
-export default ManageTrips;
+export default ManageBookings;

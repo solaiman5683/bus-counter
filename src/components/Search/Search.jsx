@@ -12,6 +12,7 @@ const Search = () => {
 	const [loading, setLoading] = React.useState(true);
 	const [show, setShow] = React.useState(false);
 	const [book, setBook] = React.useState(null);
+	const [booking, setBooking] = React.useState(null);
 	const [selectedSits, setSelectedSits] = React.useState([]);
 	React.useEffect(() => {
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/all')
@@ -35,7 +36,6 @@ const Search = () => {
 			.then(data => {
 				setSearch(data);
 				setLoading(false);
-				// console.log(data);
 			})
 			.catch(err => {
 				console.log(err);
@@ -51,12 +51,63 @@ const Search = () => {
 			date: e.target.date.value,
 		});
 	};
+	const handleBooking = e => {
+		e.preventDefault();
+		const bookingData = {
+			trip_name: book.trip_name,
+			trip_date: searchTrips.date,
+			trip_time: book.trip_time,
+			trip_price: booking.charge,
+			sit_selected: selectedSits,
+			sits: book.sits,
+			charge: booking.charge,
+			other_charges: booking.otherCharge,
+			total: selectedSits.length * parseFloat(booking.charge),
+			grand_total:
+				selectedSits.length * booking.charge +
+				parseFloat(booking.otherCharge) +
+				parseFloat(booking.chada),
+			trip_id: search._id,
+		};
+		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(bookingData),
+		})
+			.then(res => res.json())
+			.then(data => {
+				Swal.fire({
+					title: 'Booking Successful',
+					text: 'You have successfully booked a trip',
+					icon: 'success',
+					confirmButtonText: 'OK',
+				});
+				setShow(false);
+				setBooking(null);
+				setBook(null);
+				setSearch(null);
+				setSelectedSits([]);
+				setLoading(false);
+			})
+			.catch(err => console.log(err));
+	};
 	const handleChange = e => {
-		console.log(e.target.name + ' : ' + e.target.value);
-		setSearchTrips({
-			[e.target.name] : e.target.value,
-		});
-	}
+		if (!selectedSits.length) {
+			Swal.fire({
+				title: 'Please Select a Seat',
+				text: 'Please select a seat to continue',
+				icon: 'warning',
+				confirmButtonText: 'Ok',
+			});
+		} else {
+			setBooking(prev => ({
+				...prev,
+				[e.target.name]: e.target.value,
+			}));
+		}
+	};
 
 	return (
 		<div>
@@ -102,7 +153,7 @@ const Search = () => {
 							<span className='sr-only'>Loading...</span>
 						</div>
 					</div>
-				) : search && search.length > 0 ? (
+				) : search && search?.trip?.length > 0 ? (
 					<table class='table table-striped table-hover mt-5'>
 						<thead>
 							<tr>
@@ -114,7 +165,7 @@ const Search = () => {
 						</thead>
 						<tbody>
 							{search &&
-								search?.map((trip, i) => (
+								search?.trip?.map((trip, i) => (
 									<tr key={i}>
 										<th scope='row'>{i + 1 < 10 ? `0${i + 1}` : i}</th>
 										<td>{trip.trip_time}</td>
@@ -154,8 +205,8 @@ const Search = () => {
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
 							<div className='row row-cols-2 row-cols-md-4 g-4'>
 								{book &&
-									Object.keys(book.sits).map(item => (
-										<h6 className='text-center p-2'>
+									Object.keys(book.sits).map((item, i) => (
+										<h6 className='text-center p-2' key={i}>
 											<span
 												onClick={() => {
 													if (book.sits[item] && !selectedSits.includes(item)) {
@@ -168,7 +219,6 @@ const Search = () => {
 													} else {
 														const newBooks = { ...book };
 														newBooks.sits[item] = !newBooks.sits[item];
-														console.log(newBooks.sits);
 														setBook({ ...newBooks });
 														if (selectedSits.includes(item)) {
 															setSelectedSits(
@@ -203,7 +253,7 @@ const Search = () => {
 							</div>
 						</div>
 						<div className='col-12 col-md-6 px-5'>
-							<form>
+							<form onSubmit={handleBooking}>
 								<div>
 									<label htmlFor='name' className='mb-1'>
 										Name <span className='text-danger'>*</span>
@@ -211,6 +261,7 @@ const Search = () => {
 									<input
 										type='text'
 										name='name'
+										value={booking?.name}
 										onChange={handleChange}
 										className='form-control'
 										placeholder='Passenger Name'
@@ -221,8 +272,9 @@ const Search = () => {
 										Charge <span className='text-danger'>*</span>
 									</label>
 									<input
-										type='text'
+										type='number'
 										name='charge'
+										value={booking?.charge}
 										onChange={handleChange}
 										className='form-control'
 										placeholder='Charge per sit ?'
@@ -233,8 +285,9 @@ const Search = () => {
 										Chada <span className='text-danger'>*</span>
 									</label>
 									<input
-										type='text'
+										type='number'
 										name='chada'
+										value={booking?.chada}
 										onChange={handleChange}
 										className='form-control'
 										placeholder='Total chada amount'
@@ -245,19 +298,54 @@ const Search = () => {
 										Other Charge <span className='text-danger'>*</span>
 									</label>
 									<input
-										type='text'
-										name='Other Charge'
+										type='number'
+										name='otherCharge'
+										value={booking?.otherCharge}
 										onChange={handleChange}
 										className='form-control'
 										placeholder='Other Charge'
 									/>
+								</div>
+								<div className='my-2'>
+									<p className='mb-1'>
+										Selected Sits <span className='text-danger'>*</span>
+									</p>
+									{selectedSits.length > 0 &&
+										selectedSits.map((item, index) => (
+											<span key={index} className=''>
+												{item},{' '}
+											</span>
+										))}
+								</div>
+
+								<div className='mt-4 border border-2 p-2'>
+									<p className='mb-1'>
+										Total Amount : &#2547;{' '}
+										{booking && selectedSits.length * booking.charge}
+									</p>
+									<p className='mb-1'>
+										Grand Total : &#2547;{' '}
+										{booking &&
+											selectedSits.length * booking.charge +
+												parseFloat(booking.chada) +
+												parseFloat(booking.otherCharge)}
+									</p>
+								</div>
+								<div className='my-2'>
+									<button
+										type='submit'
+										className='btn btn-success btn-gradient form-control'>
+										Book Now
+									</button>
 								</div>
 							</form>
 						</div>
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button onClick={() => setShow(false)}>Close</Button>
+					<Button onClick={() => setShow(false)} className='btn-danger'>
+						Cancel
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</div>
