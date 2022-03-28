@@ -55,12 +55,14 @@ const Search = () => {
 		e.preventDefault();
 		const bookingData = {
 			trip_name: book.trip_name,
+			passenger_name: booking.name,
 			trip_date: searchTrips.date,
 			trip_time: book.trip_time,
 			trip_price: booking.charge,
 			sit_selected: selectedSits,
 			sits: book.sits,
 			charge: booking.charge,
+			chada: booking.chada,
 			other_charges: booking.otherCharge,
 			total: selectedSits.length * parseFloat(booking.charge),
 			grand_total:
@@ -69,6 +71,7 @@ const Search = () => {
 				parseFloat(booking.chada),
 			trip_id: search._id,
 		};
+		console.log(bookingData);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {
 			method: 'post',
 			headers: {
