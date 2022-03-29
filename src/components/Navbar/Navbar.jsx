@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../Contexts/AdminContext';
 import logo from '../../img/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
+	const { user, logout } = useAuth();
 	return (
 		<div>
 			<nav className='navbar navbar-expand-lg navbar-dark bg-transparent'>
@@ -37,7 +39,7 @@ const Navbar = () => {
 									className='dropdown-menu dropdown-box'
 									aria-labelledby='navbarDropdownMenuLink'>
 									<li>
-									<Link className='dropdown-item' to='/user-login'>
+										<Link className='dropdown-item' to='/user-login'>
 											User Login
 										</Link>
 									</li>
@@ -48,11 +50,18 @@ const Navbar = () => {
 									</li>
 								</ul>
 							</li>
-							<li className='nav-item'>
-								<Link className='nav-link active' to='/admin-dashboard'>
-									Admin Dashboard
-								</Link>
-							</li>
+							{user && (
+								<>
+									<li className='nav-item'>
+										<Link className='nav-link active' to='/admin-dashboard'>
+											Admin Dashboard
+										</Link>
+									</li>
+									<li className='nav-item ms-4' onClick={logout}>
+										<span className='btn btn-danger'>Logout</span>
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				</div>

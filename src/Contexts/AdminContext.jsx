@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 const Auth = createContext();
 
 export const useAuth = () => useContext(Auth);
@@ -16,6 +18,30 @@ const AuthProvider = ({ children }) => {
 		}
 		setLoading(false);
 	}, []);
+	const logout = () => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'You will be logged out',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: 'red',
+			confirmButtonText: 'Yes, logout!',
+			cancelButtonText: 'No, cancel!',
+			reverseButtons: true,
+		}).then(result => {
+			if (result.value) {
+				localStorage.removeItem('user');
+				setIsAuthenticated(false);
+				setUser(null);
+				Swal.fire({
+					title: 'Logged out!',
+					text: 'You have been logged out',
+					icon: 'success',
+				});
+				window.location.href = '/';
+			}
+		});
+	};
 	return (
 		<Auth.Provider
 			value={{
@@ -23,7 +49,8 @@ const AuthProvider = ({ children }) => {
 				user,
 				setIsAuthenticated,
 				setUser,
-				loading
+				loading,
+				logout,
 			}}>
 			{children}
 		</Auth.Provider>

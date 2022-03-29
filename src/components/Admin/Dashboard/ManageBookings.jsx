@@ -52,7 +52,7 @@ const ManageBookings = () => {
 
 	return (
 		<>
-			<div className='bg-white shadow-lg rounded p-4'>
+			<div className='bg-blur shadow-lg rounded p-4'>
 				<h2 className='text-center mb-4'>Manage Bookings</h2>
 				<table class='table'>
 					<thead>

@@ -136,7 +136,7 @@ const ManageTrips = () => {
 	}, []);
 	return (
 		<>
-			<div className='bg-white shadow-lg rounded p-4'>
+			<div className='bg-blur shadow-lg rounded p-4'>
 				<h2 className='text-center mb-4'>Manage Trips</h2>
 				<p style={{ textAlign: 'right' }}>
 					<button
