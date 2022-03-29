@@ -99,7 +99,7 @@ const ManageTrips = () => {
 	const handleDeleteTrips = id => {
 		Swal.fire({
 			title: 'Are you sure?',
-			text: 'You won\'t be able to revert this!',
+			text: "You won't be able to revert this!",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonText: 'Yes, delete it!',
@@ -152,50 +152,52 @@ const ManageTrips = () => {
 				<h2 className='text-center mb-4'>Manage Trips</h2>
 				<p style={{ textAlign: 'right' }}>
 					<button
-						className='btn btn-primary rounded-pill mx-2'
+						className='btn btn-primary rounded-pill m-2'
 						onClick={() => setTripsModalShow(true)}>
 						Add New Trips
 					</button>
 					<button
-						className='btn btn-primary rounded-pill mx-2'
+						className='btn btn-primary rounded-pill m-2'
 						onClick={() => setDateModalShow(true)}>
 						Add Trips to Date
 					</button>
 				</p>
-				<table class='table table-hover-striped'>
-					<thead>
-						<tr>
-							<th scope='col'>#</th>
-							<th scope='col'>Date</th>
-							<th scope='col'>Trips</th>
-							<th scope='col'>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{dateTrip.map((date, index) => (
-							<tr key={index}>
-								<th scope='row'>{index + 1}</th>
-								<td>{date.trip_date}</td>
-								<td>
-									<ul>
-										{date.trips.map((trip, index) => (
-											<li key={index}>
-												{trip.trip_name} - {trip.trip_time}
-											</li>
-										))}
-									</ul>
-								</td>
-								<td>
-									<button
-										onClick={() => handleDeleteTrips(date._id)}
-										className='btn btn-danger rounded-pill mx-2'>
-										Delete
-									</button>
-								</td>
+				<div className='table-responsive'>
+					<table class='table table-hover-striped'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Date</th>
+								<th scope='col'>Trips</th>
+								<th scope='col'>Actions</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{dateTrip.map((date, index) => (
+								<tr key={index}>
+									<th scope='row'>{index + 1}</th>
+									<td>{date.trip_date}</td>
+									<td>
+										<ul>
+											{date.trips.map((trip, index) => (
+												<li key={index}>
+													{trip.trip_name} - {trip.trip_time}
+												</li>
+											))}
+										</ul>
+									</td>
+									<td>
+										<button
+											onClick={() => handleDeleteTrips(date._id)}
+											className='btn btn-danger rounded-pill mx-2'>
+											Delete
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<Modal
 				show={tripsModalShow}
