@@ -97,26 +97,38 @@ const ManageTrips = () => {
 	};
 
 	const handleDeleteTrips = id => {
-		const confirm = window.confirm(
-			'Are you sure you want to delete this trip?'
-		);
-		if (confirm) {
-			fetch(
-				`https://tranquil-wildwood-98525.herokuapp.com/trips/delete/date/${id}`,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			)
-				.then(res => res.json())
-				.then(data => {
-					console.log(data);
-					const newTrips = dateTrip.filter(item => item._id !== id);
-					setDateTrip(newTrips);
-				});
-		}
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'You won\'t be able to revert this!',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, delete it!',
+			confirmButtonColor: 'red',
+			cancelButtonText: 'No, keep it',
+		}).then(result => {
+			if (result.value) {
+				fetch(
+					`https://tranquil-wildwood-98525.herokuapp.com/trips/delete/date/${id}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				)
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+						const newTrips = dateTrip.filter(item => item._id !== id);
+						setDateTrip(newTrips);
+						Swal.fire({
+							title: 'Deleted!',
+							text: 'Your file has been deleted.',
+							icon: 'success',
+						});
+					});
+			}
+		});
 	};
 
 	React.useEffect(() => {
