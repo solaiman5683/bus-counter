@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 
 const ManageBookings = () => {
 	const [bookings, setBookings] = React.useState([]);
@@ -12,6 +13,43 @@ const ManageBookings = () => {
 			})
 			.catch(err => console.log(err));
 	}, []);
+
+	const handleDelete = id => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: 'red',
+			confirmButtonText: 'Yes, delete it!',
+			cancelButtonText: 'No, cancel!',
+			reverseButtons: true,
+		}).then(result => {
+			if (result.value) {
+				fetch(
+					`https://tranquil-wildwood-98525.herokuapp.com/booking/delete/${id}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				)
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+						const newBookings = bookings.filter(item => item._id !== id);
+						setBookings(newBookings);
+						Swal.fire({
+							title: 'Deleted!',
+							text: 'Your file has been deleted.',
+							icon: 'success',
+						});
+					});
+			}
+		});
+	};
+
 	return (
 		<>
 			<div className='bg-white shadow-lg rounded p-4'>
@@ -31,34 +69,30 @@ const ManageBookings = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{bookings && bookings?.map((date, index) => (
-							<tr key={index}>
-								<th scope='row'>{index + 1}</th>
-								<td>{date.passenger_name}</td>
-								<td>
-									{date.sit_selected?.map((sit, index) => (
-										<span key={index}>{sit}, </span>
-									))}
-								</td>
-								<td>{date.charge}</td>
-								<td>{date.chada}</td>
-								<td>{date.other_charges}</td>
-								<td>{date.total}</td>
-								<td>{date.grand_total}</td>
-								<td>
-									<button
-										onClick={() => bookings(date._id)}
-										className='btn btn-info text-white rounded-pill mx-2'>
-										Approve
-									</button>
-									<button
-										onClick={() => bookings(date._id)}
-										className='btn btn-danger rounded-pill mx-2'>
-										Delete
-									</button>
-								</td>
-							</tr>
-						))}
+						{bookings &&
+							bookings?.map((date, index) => (
+								<tr key={index}>
+									<th scope='row'>{index + 1}</th>
+									<td>{date.passenger_name}</td>
+									<td>
+										{date.sit_selected?.map((sit, index) => (
+											<span key={index}>{sit}, </span>
+										))}
+									</td>
+									<td>{date.charge}</td>
+									<td>{date.chada}</td>
+									<td>{date.other_charges}</td>
+									<td>{date.total}</td>
+									<td>{date.grand_total}</td>
+									<td>
+										<button
+											onClick={() => handleDelete(date._id)}
+											className='btn btn-danger rounded-pill mx-2'>
+											Delete
+										</button>
+									</td>
+								</tr>
+							))}
 					</tbody>
 				</table>
 			</div>
