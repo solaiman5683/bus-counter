@@ -116,10 +116,10 @@ const Search = () => {
 		<div>
 			<div className={`${styles.header} pb-5`}>
 				<Navbar />
-
-				<div className='row'>
+			</div>
+			<div className={`${styles.search} row`}>
 					<div className='col-md-3'></div>
-					<div className='col-md-6 bg-white p-4 mt-5 shadow'>
+					<div className='col-md-6 bg-white p-5 mt-5 shadow'>
 						<form onSubmit={handleSubmit} className='row'>
 							<div className='col-md-5'>
 								<input type='date' name='date' className='form-control' />
@@ -147,7 +147,6 @@ const Search = () => {
 					</div>
 					<div className='col-md-3'></div>
 				</div>
-			</div>
 			<div className='container'>
 				{/* Loading Spinner */}
 				{loading ? (

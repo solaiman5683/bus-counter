@@ -1,14 +1,15 @@
 .header {
-	background: #141e30; /* fallback for old browsers */
-	background: -webkit-linear-gradient(
-		to right,
-		#243b55,
-		#141e30
-	); /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(
-		to right,
-		#243b55,
-		#141e30
-	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background-image: linear-gradient(to bottom, #243b55a4, #141e309f),
+    url('../../../public/img/bg.jpg');
+	background-size: cover;
+	background-position: center;
+	min-height: 400px;
 }
 
+.search{
+	margin-top: -120px;
+}
+
+.search div{
+	border-radius: 20px;
+}
