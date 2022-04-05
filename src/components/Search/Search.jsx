@@ -71,7 +71,7 @@ const Search = () => {
 			total: selectedSits.length * parseFloat(booking.charge),
 			grand_total:
 				selectedSits.length * booking.charge -
-				(parseFloat(booking.otherCharge) + parseFloat(booking.chada)),
+				(parseFloat(booking.otherCharge || 0) + parseFloat(booking.chada || 0)),
 			trip_id: search._id,
 		};
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {
@@ -207,9 +207,9 @@ const Search = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<div className='row'>
-						<div className='col-12 col-md-6 '>
+						<div className='col-12 col-md-6 px-4'>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className='px-5 row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
+							<div className=' row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
 										<h6
@@ -273,6 +273,7 @@ const Search = () => {
 									<input
 										type='text'
 										name='name'
+										required
 										value={booking?.name}
 										onChange={handleChange}
 										className='form-control'
@@ -286,6 +287,7 @@ const Search = () => {
 									<input
 										type='text'
 										name='from'
+										required
 										value={booking?.from}
 										onChange={handleChange}
 										className='form-control'
@@ -299,6 +301,7 @@ const Search = () => {
 									<input
 										type='text'
 										name='to'
+										required
 										value={booking?.to}
 										onChange={handleChange}
 										className='form-control'
@@ -313,6 +316,7 @@ const Search = () => {
 									<input
 										type='number'
 										name='charge'
+										required
 										value={booking?.charge}
 										onChange={handleChange}
 										className='form-control'

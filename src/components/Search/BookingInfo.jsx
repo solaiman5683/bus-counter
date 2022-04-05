@@ -21,33 +21,35 @@ const BookingInfo = ({ book, date }) => {
 	}, [book, date]);
 	return (
 		<div>
-			<div className='table-responsive'>
-				<table class='table'>
-					<thead>
-						<tr>
-							<th scope='col'>গন্তব্য</th>
-							<th scope='col'>সিট নম্বর</th>
-							<th scope='col'>টোটাল ভাড়া</th>
-						</tr>
-					</thead>
-					<tbody>
-						{bookings &&
-							bookings?.map((date, index) => (
-								<tr key={index}>
-									<td>
-										{date.trip_from} - {date.trip_to}
-									</td>
-									<td>
-										{date.sit_selected?.map((sit, index) => (
-											<span key={index}>{sit}, </span>
-										))}
-									</td>
-									<td>{date.total}</td>
-								</tr>
-							))}
-					</tbody>
-				</table>
-			</div>
+			{bookings.length > 0 && (
+				<div className='table-responsive'>
+					<table class='table'>
+						<thead>
+							<tr>
+								<th scope='col'>গন্তব্য</th>
+								<th scope='col'>সিট নম্বর</th>
+								<th scope='col'>টোটাল ভাড়া</th>
+							</tr>
+						</thead>
+						<tbody>
+							{bookings &&
+								bookings?.map((date, index) => (
+									<tr key={index}>
+										<td>
+											{date.trip_from} - {date.trip_to}
+										</td>
+										<td>
+											{date.sit_selected?.map((sit, index) => (
+												<span key={index}>{sit}, </span>
+											))}
+										</td>
+										<td>{date.total}</td>
+									</tr>
+								))}
+						</tbody>
+					</table>
+				</div>
+			)}
 		</div>
 	);
 };
