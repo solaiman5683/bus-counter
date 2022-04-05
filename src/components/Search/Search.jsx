@@ -125,17 +125,14 @@ const Search = () => {
 				<div className='col-md-3'></div>
 				<div className='col-md-6 bg-white p-5 mt-5 shadow'>
 					<form onSubmit={handleSubmit} className='row'>
-						<div className='col-md-5'>
-							<input type='date' name='date' className='form-control' />
-						</div>
-						<div className='col-md-5'>
+						<div className='col-md-5 p-2'>
 							<select name='trip' className='form-control'>
 								<option
 									hidden
 									className='text-primary'
 									placeholder='trip'
 									value=''>
-									Your favorite trip
+									নবীন বরণ গাড়ির ট্রিপ
 								</option>
 								{trips?.map(trip => (
 									<option key={trip._id} value={trip.trip_name}>
@@ -144,8 +141,14 @@ const Search = () => {
 								))}
 							</select>
 						</div>
-						<div className='col-md-2'>
-							<button className='btn btn-primary form-control'>Search</button>
+						<div className='col-md-4 p-2'>
+							<input type='date' name='date' className='form-control' />
+						</div>
+
+						<div className='col-md-3 p-2'>
+							<button className='btn btn-primary form-control'>
+								তারিখ নির্ধারণ করুন
+							</button>
 						</div>
 					</form>
 				</div>
@@ -209,7 +212,7 @@ const Search = () => {
 					<div className='row'>
 						<div className='col-12 col-md-6 px-4'>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className=' row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
+							<div className=' row row-cols-5 justify-content-evenly g-4'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
 										<h6
@@ -253,20 +256,25 @@ const Search = () => {
 							</div>
 							<div className='row mt-5 text-center'>
 								<div className='col-md-4'>
-									<p className='sit-active p-2 px-3 text-white sit-item pointer'>Sit booked</p>
+									<p className='sit-active p-2 px-3 text-white sit-item pointer'>
+										Sit booked
+									</p>
 								</div>
 								<div className='col-md-4'>
-									<p className='sit-selected p-2 text-white sit-item pointer'>Sit selected</p>
+									<p className='sit-selected p-2 text-white sit-item pointer'>
+										Sit selected
+									</p>
 								</div>
 								<div className='col-md-4'>
-									<p className='p-2 text-white sit-item pointer'>Sit available</p>
+									<p className='p-2 text-white sit-item pointer'>
+										Sit available
+									</p>
 								</div>
 							</div>
-							
 						</div>
 						<div className='col-12 col-md-6'>
 							<form onSubmit={handleBooking}>
-							<div>
+								<div>
 									<label htmlFor='name' className='mb-1'>
 										Name (নাম) <span className='text-danger'>*</span>
 									</label>
@@ -308,7 +316,7 @@ const Search = () => {
 										placeholder='যাত্রা শেষ করার স্থান'
 									/>
 								</div>
-								
+
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
 										Charge(ভাড়া) <span className='text-danger'>*</span>
@@ -363,9 +371,7 @@ const Search = () => {
 									/>
 								</div>
 								<div className='my-2'>
-									<p className='mb-1'>
-										Selected Sits
-									</p>
+									<p className='mb-1'>Selected Sits</p>
 									{selectedSits.length > 0 &&
 										selectedSits.map((item, index) => (
 											<span key={index} className=''>
@@ -382,11 +388,13 @@ const Search = () => {
 									</p>
 									<p className='mb-1'>
 										Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
-										{parseFloat(booking?.chada) || 0} - {' '}
-										{parseFloat(booking?.commission) || 0} - {parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
+										{parseFloat(booking?.chada) || 0} -{' '}
+										{parseFloat(booking?.commission) || 0} -{' '}
+										{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
 										{(booking &&
 											selectedSits.length * booking.charge -
-												(parseFloat(booking.chada || 0) + parseFloat(booking.commission || 0) +
+												(parseFloat(booking.chada || 0) +
+													parseFloat(booking.commission || 0) +
 													parseFloat(booking.otherCharge || 0))) ||
 											0}
 									</p>

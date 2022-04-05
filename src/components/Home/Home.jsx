@@ -62,7 +62,7 @@ const Home = () => {
 									className='text-primary'
 									placeholder='trip'
 									value=''>
-									Your favorite trip
+									নবীন বরণ গাড়ির ট্রিপ
 								</option>
 								{loading ? (
 									<option className='spinner-border' role='status'>
@@ -85,7 +85,7 @@ const Home = () => {
 								className='form-control'
 							/>
 
-							<button className='btn btn-white form-control mt-4'>Check</button>
+							<button className='btn btn-white form-control mt-4'>তারিখ নির্ধারণ করুন</button>
 						</form>
 					</div>
 				</div>
