@@ -7,7 +7,7 @@ const ManageTrips = () => {
 	const [dateModalShow, setDateModalShow] = React.useState(false);
 	const [trips, setTrips] = React.useState([]);
 	const [dateTrip, setDateTrip] = React.useState([]);
-
+	
 	const handleAddTripsToDate = e => {
 		e.preventDefault();
 		function tConvert(time) {

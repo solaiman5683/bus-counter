@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { useData } from '../../Contexts/DataContext';
 // import { useAuth } from '../../Contexts/AdminContext';
 import Navbar from '../Navbar/Navbar';
@@ -9,22 +10,37 @@ const Home = () => {
 	const [trips, setTrips] = React.useState([]);
 	const { setSearchTrips } = useData();
 	const navigate = useNavigate();
-
+	const [loading, setLoading] = React.useState(true);
 	const handleSubmit = e => {
 		e.preventDefault();
 		console.log(e.target.trip.value);
 		console.log(e.target.date.value);
-		setSearchTrips({
-			trip: e.target.trip.value,
-			date: e.target.date.value
-		});
-		navigate('/search');
+
+		if (e.target.trip.value === '' && e.target.date.value === '') {
+			Swal.fire({
+				title: 'Search Failed!',
+				text: 'Please select a trip name or date.',
+				icon: 'error',
+			});
+		} else if (e.target.trip.value === '') {
+			Swal.fire('Warning!', 'Please select a trip.', 'warning');
+		} else if (e.target.date.value === '') {
+			Swal.fire('Warning!', 'Please select a date.', 'warning');
+		} else {
+			setSearchTrips({
+				trip: e.target.trip.value,
+				date: e.target.date.value,
+			});
+			navigate('/search');
+		}
 	};
 	React.useEffect(() => {
+		setLoading(true);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/all')
 			.then(res => res.json())
 			.then(data => {
 				setTrips(data);
+				setLoading(false);
 			})
 			.catch(err => console.log(err));
 	}, []);
@@ -45,14 +61,20 @@ const Home = () => {
 									hidden
 									className='text-primary'
 									placeholder='trip'
-									value='your favorite trip'>
+									value=''>
 									Your favorite trip
 								</option>
-								{trips?.map(trip => (
-									<option key={trip._id} value={trip.trip_name}>
-										{trip.trip_name}
+								{loading ? (
+									<option className='spinner-border' role='status'>
+										loading trips...
 									</option>
-								))}
+								) : (
+									trips?.map(trip => (
+										<option key={trip._id} value={trip.trip_name}>
+											{trip.trip_name}
+										</option>
+									))
+								)}
 							</select>
 
 							<br />
@@ -63,7 +85,7 @@ const Home = () => {
 								className='form-control'
 							/>
 
-							<button className='btn btn-white form-control mt-4'>check</button>
+							<button className='btn btn-white form-control mt-4'>Check</button>
 						</form>
 					</div>
 				</div>

@@ -3,6 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useData } from '../../Contexts/DataContext';
 import Navbar from '../Navbar/Navbar';
+import BookingInfo from './BookingInfo';
 import styles from './style.module.css';
 
 const Search = () => {
@@ -34,7 +35,6 @@ const Search = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				setSearch(data);
 				setLoading(false);
 			})
@@ -65,6 +65,7 @@ const Search = () => {
 			sit_selected: selectedSits,
 			sits: book.sits,
 			charge: booking.charge,
+			commission: booking.commission,
 			chada: booking.chada,
 			other_charges: booking.otherCharge,
 			total: selectedSits.length * parseFloat(booking.charge),
@@ -73,7 +74,6 @@ const Search = () => {
 				(parseFloat(booking.otherCharge) + parseFloat(booking.chada)),
 			trip_id: search._id,
 		};
-		console.log(bookingData);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {
 			method: 'post',
 			headers: {
@@ -114,6 +114,8 @@ const Search = () => {
 		}
 	};
 
+	console.log(search);
+
 	return (
 		<div>
 			<div className={`${styles.header} pb-5`}>
@@ -132,7 +134,7 @@ const Search = () => {
 									hidden
 									className='text-primary'
 									placeholder='trip'
-									value='your favorite trip'>
+									value=''>
 									Your favorite trip
 								</option>
 								{trips?.map(trip => (
@@ -205,9 +207,9 @@ const Search = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<div className='row'>
-						<div className='col-12 col-md-6 px-5'>
+						<div className='col-12 col-md-6 '>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className='row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
+							<div className='px-5 row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
 										<h6
@@ -249,24 +251,35 @@ const Search = () => {
 										</h6>
 									))}
 							</div>
-							<div className='row mt-4'>
+							<div className='row mt-5 text-center'>
 								<div className='col-md-4'>
-									<p className='sit-active p-2 px-3 text-white sit-item pointer'></p>
-									Sit booked
+									<p className='sit-active p-2 px-3 text-white sit-item pointer'>Sit booked</p>
 								</div>
 								<div className='col-md-4'>
-									<p className='sit-selected p-2 text-white sit-item pointer'></p>
-									Sit selected
+									<p className='sit-selected p-2 text-white sit-item pointer'>Sit selected</p>
 								</div>
 								<div className='col-md-4'>
-									<p className='p-2 text-white sit-item pointer'></p>
-									Sit available
+									<p className='p-2 text-white sit-item pointer'>Sit available</p>
 								</div>
 							</div>
+							
 						</div>
-						<div className='col-12 col-md-6 px-5'>
+						<div className='col-12 col-md-6'>
 							<form onSubmit={handleBooking}>
-								<div>
+							<div>
+									<label htmlFor='name' className='mb-1'>
+										Name (নাম) <span className='text-danger'>*</span>
+									</label>
+									<input
+										type='text'
+										name='name'
+										value={booking?.name}
+										onChange={handleChange}
+										className='form-control'
+										placeholder='যাত্রীর নাম'
+									/>
+								</div>
+								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
 										From (থেকে) <span className='text-danger'>*</span>
 									</label>
@@ -292,19 +305,7 @@ const Search = () => {
 										placeholder='যাত্রা শেষ করার স্থান'
 									/>
 								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										Name (নাম) <span className='text-danger'>*</span>
-									</label>
-									<input
-										type='text'
-										name='name'
-										value={booking?.name}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='যাত্রীর নাম'
-									/>
-								</div>
+								
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
 										Charge(ভাড়া) <span className='text-danger'>*</span>
@@ -320,7 +321,20 @@ const Search = () => {
 								</div>
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
-										Chada (চাঁদা) <span className='text-danger'>*</span>
+										Commission (কমিশন)
+									</label>
+									<input
+										type='number'
+										name='commission'
+										value={booking?.commission}
+										onChange={handleChange}
+										className='form-control'
+										placeholder='কমিশন পরিমাণ ?'
+									/>
+								</div>
+								<div className='my-2'>
+									<label htmlFor='name' className='mb-1'>
+										Chada (চাঁদা)
 									</label>
 									<input
 										type='number'
@@ -333,7 +347,7 @@ const Search = () => {
 								</div>
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
-										Other Charge <span className='text-danger'>*</span>
+										Other Charge
 									</label>
 									<input
 										type='number'
@@ -346,7 +360,7 @@ const Search = () => {
 								</div>
 								<div className='my-2'>
 									<p className='mb-1'>
-										Selected Sits <span className='text-danger'>*</span>
+										Selected Sits
 									</p>
 									{selectedSits.length > 0 &&
 										selectedSits.map((item, index) => (
@@ -364,12 +378,12 @@ const Search = () => {
 									</p>
 									<p className='mb-1'>
 										Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
-										{parseFloat(booking?.chada) || 0} -{' '}
-										{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
+										{parseFloat(booking?.chada) || 0} - {' '}
+										{parseFloat(booking?.commission) || 0} - {parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
 										{(booking &&
 											selectedSits.length * booking.charge -
-												(parseFloat(booking.chada) +
-													parseFloat(booking.otherCharge))) ||
+												(parseFloat(booking.chada || 0) + parseFloat(booking.commission || 0) +
+													parseFloat(booking.otherCharge || 0))) ||
 											0}
 									</p>
 								</div>
@@ -382,6 +396,8 @@ const Search = () => {
 								</div>
 							</form>
 						</div>
+
+						<BookingInfo book={book} date={searchTrips.date} />
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
