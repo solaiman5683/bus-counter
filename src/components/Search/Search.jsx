@@ -34,6 +34,7 @@ const Search = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
+				console.log(data);
 				setSearch(data);
 				setLoading(false);
 			})
@@ -54,6 +55,8 @@ const Search = () => {
 	const handleBooking = e => {
 		e.preventDefault();
 		const bookingData = {
+			trip_from: booking.from,
+			trip_to: booking.to,
 			trip_name: book.trip_name,
 			passenger_name: booking.name,
 			trip_date: searchTrips.date,
@@ -66,9 +69,8 @@ const Search = () => {
 			other_charges: booking.otherCharge,
 			total: selectedSits.length * parseFloat(booking.charge),
 			grand_total:
-				selectedSits.length * booking.charge +
-				parseFloat(booking.otherCharge) +
-				parseFloat(booking.chada),
+				selectedSits.length * booking.charge -
+				(parseFloat(booking.otherCharge) + parseFloat(booking.chada)),
 			trip_id: search._id,
 		};
 		console.log(bookingData);
@@ -118,35 +120,35 @@ const Search = () => {
 				<Navbar />
 			</div>
 			<div className={`${styles.search} row`}>
-					<div className='col-md-3'></div>
-					<div className='col-md-6 bg-white p-5 mt-5 shadow'>
-						<form onSubmit={handleSubmit} className='row'>
-							<div className='col-md-5'>
-								<input type='date' name='date' className='form-control' />
-							</div>
-							<div className='col-md-5'>
-								<select name='trip' className='form-control'>
-									<option
-										hidden
-										className='text-primary'
-										placeholder='trip'
-										value='your favorite trip'>
-										Your favorite trip
+				<div className='col-md-3'></div>
+				<div className='col-md-6 bg-white p-5 mt-5 shadow'>
+					<form onSubmit={handleSubmit} className='row'>
+						<div className='col-md-5'>
+							<input type='date' name='date' className='form-control' />
+						</div>
+						<div className='col-md-5'>
+							<select name='trip' className='form-control'>
+								<option
+									hidden
+									className='text-primary'
+									placeholder='trip'
+									value='your favorite trip'>
+									Your favorite trip
+								</option>
+								{trips?.map(trip => (
+									<option key={trip._id} value={trip.trip_name}>
+										{trip.trip_name}
 									</option>
-									{trips?.map(trip => (
-										<option key={trip._id} value={trip.trip_name}>
-											{trip.trip_name}
-										</option>
-									))}
-								</select>
-							</div>
-							<div className='col-md-2'>
-								<button className='btn btn-primary form-control'>Search</button>
-							</div>
-						</form>
-					</div>
-					<div className='col-md-3'></div>
+								))}
+							</select>
+						</div>
+						<div className='col-md-2'>
+							<button className='btn btn-primary form-control'>Search</button>
+						</div>
+					</form>
 				</div>
+				<div className='col-md-3'></div>
+			</div>
 			<div className='container'>
 				{/* Loading Spinner */}
 				{loading ? (
@@ -205,10 +207,18 @@ const Search = () => {
 					<div className='row'>
 						<div className='col-12 col-md-6 px-5'>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className='row row-cols-2 row-cols-md-4 g-4'>
+							<div className='row row-cols-2 row-cols-md-5 justify-content-evenly g-4'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
-										<h6 className='text-center p-2' key={i}>
+										<h6
+											className={`text-center p-2 ${
+												[
+													2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50,
+												].includes(i + 1)
+													? 'mr-5'
+													: ''
+											}`}
+											key={i}>
 											<span
 												onClick={() => {
 													if (book.sits[item] && !selectedSits.includes(item)) {
@@ -258,7 +268,33 @@ const Search = () => {
 							<form onSubmit={handleBooking}>
 								<div>
 									<label htmlFor='name' className='mb-1'>
-										Name <span className='text-danger'>*</span>
+										From (থেকে) <span className='text-danger'>*</span>
+									</label>
+									<input
+										type='text'
+										name='from'
+										value={booking?.from}
+										onChange={handleChange}
+										className='form-control'
+										placeholder='যাত্রা শুরু করার স্থান'
+									/>
+								</div>
+								<div className='my-2'>
+									<label htmlFor='name' className='mb-1'>
+										To (পর্যন্ত) <span className='text-danger'>*</span>
+									</label>
+									<input
+										type='text'
+										name='to'
+										value={booking?.to}
+										onChange={handleChange}
+										className='form-control'
+										placeholder='যাত্রা শেষ করার স্থান'
+									/>
+								</div>
+								<div className='my-2'>
+									<label htmlFor='name' className='mb-1'>
+										Name (নাম) <span className='text-danger'>*</span>
 									</label>
 									<input
 										type='text'
@@ -266,12 +302,12 @@ const Search = () => {
 										value={booking?.name}
 										onChange={handleChange}
 										className='form-control'
-										placeholder='Passenger Name'
+										placeholder='যাত্রীর নাম'
 									/>
 								</div>
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
-										Charge <span className='text-danger'>*</span>
+										Charge(ভাড়া) <span className='text-danger'>*</span>
 									</label>
 									<input
 										type='number'
@@ -279,12 +315,12 @@ const Search = () => {
 										value={booking?.charge}
 										onChange={handleChange}
 										className='form-control'
-										placeholder='Charge per sit ?'
+										placeholder='প্রতি সিট এর ভাড়া ?'
 									/>
 								</div>
 								<div className='my-2'>
 									<label htmlFor='name' className='mb-1'>
-										Chada <span className='text-danger'>*</span>
+										Chada (চাঁদা) <span className='text-danger'>*</span>
 									</label>
 									<input
 										type='number'
@@ -292,7 +328,7 @@ const Search = () => {
 										value={booking?.chada}
 										onChange={handleChange}
 										className='form-control'
-										placeholder='Total chada amount'
+										placeholder='চাঁদা পরিমাণ ?'
 									/>
 								</div>
 								<div className='my-2'>
@@ -305,7 +341,7 @@ const Search = () => {
 										value={booking?.otherCharge}
 										onChange={handleChange}
 										className='form-control'
-										placeholder='Other Charge'
+										placeholder='অন্যান্য খরচ ?'
 									/>
 								</div>
 								<div className='my-2'>
@@ -322,15 +358,19 @@ const Search = () => {
 
 								<div className='mt-4 border border-2 p-2'>
 									<p className='mb-1'>
-										Total Amount : &#2547;{' '}
-										{booking && selectedSits.length * booking.charge}
+										Total Amount({selectedSits.length} * {booking?.charge}) :
+										&#2547;{' '}
+										{(booking && selectedSits.length * booking.charge) || 0}
 									</p>
 									<p className='mb-1'>
-										Grand Total : &#2547;{' '}
-										{booking &&
-											selectedSits.length * booking.charge +
-												parseFloat(booking.chada) +
-												parseFloat(booking.otherCharge)}
+										Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
+										{parseFloat(booking?.chada) || 0} -{' '}
+										{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
+										{(booking &&
+											selectedSits.length * booking.charge -
+												(parseFloat(booking.chada) +
+													parseFloat(booking.otherCharge))) ||
+											0}
 									</p>
 								</div>
 								<div className='my-2'>

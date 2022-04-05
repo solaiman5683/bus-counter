@@ -25,35 +25,10 @@ const Navbar = () => {
 					</button>
 					<div className='collapse navbar-collapse' id='navbarNavDropdown'>
 						<ul className='navbar-nav ms-auto'>
-							<li className='nav-item dropdown '>
-								<a
-									className='nav-link active dropdown-toggle'
-									href='/'
-									id='navbarDropdownMenuLink'
-									role='button'
-									data-bs-toggle='dropdown'
-									aria-expanded='false'>
-									Login
-								</a>
-								<ul
-									className='dropdown-menu dropdown-box'
-									aria-labelledby='navbarDropdownMenuLink'>
-									<li>
-										<Link className='dropdown-item' to='/user-login'>
-											User Login
-										</Link>
-									</li>
-									<li>
-										<Link className='dropdown-item' to='/admin-login'>
-											Admin Login
-										</Link>
-									</li>
-								</ul>
-							</li>
 							{user && (
 								<>
-									<li className='nav-item'>
-										<Link className='nav-link active' to='/admin-dashboard'>
+									<li className='nav-item nav-link'>
+										<Link className='text-light fw-bold' to='/admin-dashboard'>
 											Admin Dashboard
 										</Link>
 									</li>

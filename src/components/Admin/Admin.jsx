@@ -69,7 +69,7 @@ const Admin = () => {
 						margin: '20px 0',
 						textTransform: 'uppercase',
 					}}>
-					Login to Admin Panel
+					Login to Continue
 				</h3>
 				<form className={styles.form} onSubmit={handleLogin}>
 					<div>
