@@ -8,6 +8,7 @@ import ManageTrips from './components/Admin/Dashboard/ManageTrips';
 import Home from './components/Home/Home';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Search from './components/Search/Search';
+import UserRegister from './components/UserLogin/UserRegister';
 // import 'sweetalert2/src/sweetalert2.scss'
 
 function App() {
@@ -24,6 +25,14 @@ function App() {
 				/>
 				<Route path='*' element={<div>Not Found</div>} />
 				<Route path='login' element={<Admin />} />
+				<Route
+					path='register'
+					element={
+						<PrivateRoute>
+							<UserRegister />
+						</PrivateRoute>
+					}
+				/>
 				<Route
 					path='admin-dashboard/*'
 					element={

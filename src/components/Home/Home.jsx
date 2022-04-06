@@ -18,7 +18,7 @@ const Home = () => {
 
 		if (e.target.trip.value === '' && e.target.date.value === '') {
 			Swal.fire({
-				title: 'Search Failed!',
+				title: 'Can not search!',
 				text: 'Please select a trip name or date.',
 				icon: 'error',
 			});

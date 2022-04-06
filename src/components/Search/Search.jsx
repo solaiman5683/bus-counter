@@ -45,12 +45,25 @@ const Search = () => {
 	}, [searchTrips]);
 	const handleSubmit = e => {
 		e.preventDefault();
-		setLoading(true);
-		setSearch(null);
-		setSearchTrips({
-			trip: e.target.trip.value,
-			date: e.target.date.value,
-		});
+
+		if (e.target.trip.value === '' && e.target.date.value === '') {
+			Swal.fire({
+				title: 'Can not search!',
+				text: 'Please select a trip name or date.',
+				icon: 'error',
+			});
+		} else if (e.target.trip.value === '') {
+			Swal.fire('Warning!', 'Please select a trip.', 'warning');
+		} else if (e.target.date.value === '') {
+			Swal.fire('Warning!', 'Please select a date.', 'warning');
+		} else {
+			setLoading(true);
+			setSearch(null);
+			setSearchTrips({
+				trip: e.target.trip.value,
+				date: e.target.date.value,
+			});
+		}
 	};
 	const handleBooking = e => {
 		e.preventDefault();
@@ -71,7 +84,9 @@ const Search = () => {
 			total: selectedSits.length * parseFloat(booking.charge),
 			grand_total:
 				selectedSits.length * booking.charge -
-				(parseFloat(booking.otherCharge || 0) + parseFloat(booking.chada || 0)),
+				(parseFloat(booking.otherCharge || 0) +
+					parseFloat(booking.chada || 0) +
+					parseFloat(booking.commission || 0)),
 			trip_id: search._id,
 		};
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {

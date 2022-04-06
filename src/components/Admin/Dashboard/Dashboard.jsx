@@ -1,9 +1,23 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { useAuth } from '../../../Contexts/AdminContext';
 
 const Dashboard = () => {
-	const { logout } = useAuth();
+	const { logout, user } = useAuth();
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (user.type !== 'admin') {
+			console.log('user type is not admin');
+			Swal.fire({
+				title: 'Oops...',
+				text: 'You are not authorized to view this page!',
+				icon: 'error',
+				confirmButtonText: 'okay',
+			})
+			navigate('/');
+		}
+	}, [user, navigate]);
 	return (
 		<div className='dashboard-bg'>
 			<div className='container-fluid'>

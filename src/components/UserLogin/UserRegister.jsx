@@ -1,22 +1,28 @@
-import React from 'react';
-import styles from './style.module.css';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../Contexts/AdminContext';
+import styles from './style.module.css';
 
-const UserLogin = () => {
-    const { user, setUser } = useAuth();
-
-	if (user) {
-		return (
-			<Navigate to='/' />
-		);
-	}
+const UserRegister = () => {
+	const { user } = useAuth();
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (user.type !== 'admin') {
+			Swal.fire({
+				title: 'Oops...',
+				text: 'You are not authorized to view this page!',
+				icon: 'error',
+				confirmButtonText: 'okay',
+			});
+			navigate('/');
+		}
+	}, [user, navigate]);
 
 	const handleLogin = e => {
 		e.preventDefault();
 		console.log(e.target.email.value);
-		fetch('https://tranquil-wildwood-98525.herokuapp.com/users/login', {
+		fetch('https://tranquil-wildwood-98525.herokuapp.com/users/register', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -24,17 +30,17 @@ const UserLogin = () => {
 			body: JSON.stringify({
 				email: e.target.email.value,
 				password: e.target.password.value,
+				type: e.target.role.value,
 			}),
 		})
 			.then(res => res.json())
 			.then(data => {
 				console.log(data);
 				Swal.fire({
-					title: 'Login Successful!',
-					text: 'Welcome back!',
+					title: 'Registration Successful!',
+					text: 'User successfully registered! Now you can login to continue.',
 					icon: 'success',
 				});
-				setUser(data.user);
 			});
 	};
 	return (
@@ -60,22 +66,39 @@ const UserLogin = () => {
 						margin: '20px 0',
 						textTransform: 'uppercase',
 					}}>
-					Login as an User
+					Register an User
 				</h3>
 				<form className={styles.form} onSubmit={handleLogin}>
 					<div>
 						<label htmlFor='email'>Email *</label>
-						<input type='email' placeholder='Enter Your Email' name='email' required />
+						<input
+							type='email'
+							placeholder='Enter Your Email'
+							name='email'
+							required
+						/>
 					</div>
 					<div>
 						<label htmlFor='password'>Password *</label>
-						<input type='password' placeholder='Enter Your Password' name='password' required />
-                    </div>
-                    <input type="submit" value='Login' />
+						<input
+							type='password'
+							placeholder='Enter Your Password'
+							name='password'
+							required
+						/>
+					</div>
+					<div>
+						<label htmlFor='role'>Role *</label>
+						<select name='role' className='form-control' required>
+							<option value='user'>User</option>
+							<option value='admin'>Admin</option>
+						</select>
+					</div>
+					<input type='submit' value='Login' />
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default UserLogin;
+export default UserRegister;

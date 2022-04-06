@@ -27,11 +27,24 @@ const Navbar = () => {
 						<ul className='navbar-nav ms-auto'>
 							{user && (
 								<>
-									<li className='nav-item nav-link'>
-										<Link className='text-light fw-bold' to='/admin-dashboard'>
-											Admin Dashboard
-										</Link>
-									</li>
+									{user?.type === 'admin' && (
+										<>
+											<li className='nav-item btn btn-outline-light'>
+												<Link
+													className=''
+													to='/register'>
+													Register New User
+												</Link>
+											</li>
+											<li className='nav-item btn btn-outline-warning ms-3'>
+												<Link
+													className='fw-bold'
+													to='/admin-dashboard'>
+													Admin Dashboard
+												</Link>
+											</li>
+										</>
+									)}
 									<li className='nav-item ms-4' onClick={logout}>
 										<span className='btn btn-danger'>Logout</span>
 									</li>
