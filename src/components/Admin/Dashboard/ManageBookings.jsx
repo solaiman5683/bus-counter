@@ -9,7 +9,6 @@ const ManageBookings = () => {
 			.then(res => res.json())
 			.then(data => {
 				setBookings(data);
-				console.log(data);
 			})
 			.catch(err => console.log(err));
 	}, []);
@@ -37,7 +36,6 @@ const ManageBookings = () => {
 				)
 					.then(res => res.json())
 					.then(data => {
-						console.log(data);
 						const newBookings = bookings.filter(item => item._id !== id);
 						setBookings(newBookings);
 						Swal.fire({

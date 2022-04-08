@@ -21,7 +21,6 @@ const UserRegister = () => {
 
 	const handleLogin = e => {
 		e.preventDefault();
-		console.log(e.target.email.value);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/users/register', {
 			method: 'POST',
 			headers: {
@@ -35,7 +34,6 @@ const UserRegister = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				Swal.fire({
 					title: 'Registration Successful!',
 					text: 'User successfully registered! Now you can login to continue.',

@@ -37,7 +37,6 @@ const ManageTrips = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				setDateModalShow(false);
 				setDateTrip(prev => {
 					const f = prev.find(item => item.trip_date === e.target.date.value);
@@ -72,7 +71,6 @@ const ManageTrips = () => {
 
 	const handleAddTrips = e => {
 		e.preventDefault();
-		console.log(e.target.trip.value);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/add', {
 			method: 'POST',
 			headers: {
@@ -84,9 +82,7 @@ const ManageTrips = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				setTrips([...trips, { trip_name: e.target.trip.value }]);
-				console.log(trips);
 				setTripsModalShow(false);
 				Swal.fire({
 					title: 'Success',
@@ -118,7 +114,6 @@ const ManageTrips = () => {
 				)
 					.then(res => res.json())
 					.then(data => {
-						console.log(data);
 						const newTrips = dateTrip.filter(item => item._id !== id);
 						setDateTrip(newTrips);
 						Swal.fire({
@@ -141,7 +136,6 @@ const ManageTrips = () => {
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/all/date')
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				setDateTrip(data);
 			})
 			.catch(err => console.log(err));

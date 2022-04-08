@@ -15,7 +15,6 @@ const Admin = () => {
 
 	const handleLogin = e => {
 		e.preventDefault();
-		console.log(e.target.email.value);
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/users/login', {
 			method: 'POST',
 			headers: {
@@ -28,7 +27,6 @@ const Admin = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				Swal.fire({
 					title: 'Login Successful!',
 					text: 'Welcome back!',

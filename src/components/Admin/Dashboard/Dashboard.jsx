@@ -8,7 +8,6 @@ const Dashboard = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (user.type !== 'admin') {
-			console.log('user type is not admin');
 			Swal.fire({
 				title: 'Oops...',
 				text: 'You are not authorized to view this page!',

@@ -13,8 +13,6 @@ const Home = () => {
 	const [loading, setLoading] = React.useState(true);
 	const handleSubmit = e => {
 		e.preventDefault();
-		console.log(e.target.trip.value);
-		console.log(e.target.date.value);
 
 		if (e.target.trip.value === '' && e.target.date.value === '') {
 			Swal.fire({

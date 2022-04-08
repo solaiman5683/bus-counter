@@ -8,7 +8,6 @@ const BookingInfo = ({ book, date }) => {
 			fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/all')
 				.then(res => res.json())
 				.then(data => {
-					console.log(data, book, date);
 					const dataFilter = data.filter(
 						item =>
 							item.trip_date === date &&
