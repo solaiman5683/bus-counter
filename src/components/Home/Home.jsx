@@ -56,7 +56,7 @@ const Home = () => {
 								Book a Trip
 							</h1>
 
-							<select name='trip' className='form-control'>
+							<select name='trip' className='form-control mb-3'>
 								<option
 									hidden
 									className='text-primary'
@@ -76,8 +76,7 @@ const Home = () => {
 									))
 								)}
 							</select>
-
-							<br />
+							<span className='text-light'>তারিখ নির্ধারণ করুন</span>
 							<input
 								placeholder='Date'
 								name='date'
@@ -85,7 +84,9 @@ const Home = () => {
 								className='form-control'
 							/>
 
-							<button className='btn btn-white form-control mt-4'>তারিখ নির্ধারণ করুন</button>
+							<button className='btn btn-white form-control mt-4'>
+								ট্রিপ খুজুন
+							</button>
 						</form>
 					</div>
 				</div>

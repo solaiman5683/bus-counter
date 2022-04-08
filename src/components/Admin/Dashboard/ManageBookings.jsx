@@ -55,11 +55,13 @@ const ManageBookings = () => {
 			<div className='bg-blur shadow-lg rounded p-4'>
 				<h2 className='text-center mb-4'>Manage Bookings</h2>
 				<div className='table-responsive'>
-					<table class='table'>
+					<table class='table table-hover border-secondary'>
 						<thead>
 							<tr>
 								<th scope='col'>#</th>
 								<th scope='col'>Name</th>
+								<th scope='col'>Trip</th>
+								<th scope='col'>Time</th>
 								<th scope='col'>Selected Sits</th>
 								<th scope='col'>Charge</th>
 								<th scope='col'>Chada</th>
@@ -75,6 +77,8 @@ const ManageBookings = () => {
 									<tr key={index}>
 										<th scope='row'>{index + 1}</th>
 										<td>{date.passenger_name}</td>
+										<td>{date.trip_name}</td>
+										<td>{date.trip_date} - {date.trip_time}</td>
 										<td>
 											{date.sit_selected?.map((sit, index) => (
 												<span key={index}>{sit}, </span>

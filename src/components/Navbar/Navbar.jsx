@@ -29,20 +29,16 @@ const Navbar = () => {
 								<>
 									{user?.type === 'admin' && (
 										<>
-											<li className='nav-item btn btn-outline-light'>
-												<Link
-													className=''
-													to='/register'>
-													Register New User
-												</Link>
-											</li>
-											<li className='nav-item btn btn-outline-warning ms-3'>
-												<Link
-													className='fw-bold'
-													to='/admin-dashboard'>
-													Admin Dashboard
-												</Link>
-											</li>
+											<Link
+												className='nav-item btn btn-outline-light'
+												to='/register'>
+												Register New User
+											</Link>
+											<Link
+												className='nav-item btn btn-outline-warning ms-3'
+												to='/admin-dashboard'>
+												Admin Dashboard
+											</Link>
 										</>
 									)}
 									<li className='nav-item ms-4' onClick={logout}>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useData } from '../../Contexts/DataContext';
+import { useAuth } from '../../Contexts/AdminContext';
 import Navbar from '../Navbar/Navbar';
 import BookingInfo from './BookingInfo';
 import styles from './style.module.css';
@@ -9,6 +10,7 @@ import styles from './style.module.css';
 const Search = () => {
 	const [trips, setTrips] = React.useState([]);
 	const { searchTrips, setSearchTrips } = useData();
+	const { user } = useAuth();
 	const [search, setSearch] = React.useState(null);
 	const [loading, setLoading] = React.useState(true);
 	const [show, setShow] = React.useState(false);
@@ -129,8 +131,6 @@ const Search = () => {
 		}
 	};
 
-	console.log(search);
-
 	return (
 		<div>
 			<div className={`${styles.header} pb-5`}>
@@ -225,9 +225,12 @@ const Search = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<div className='row'>
-						<div className='col-12 col-md-6 px-4'>
+						<div
+							className={`col-12 col-md-6 px-4 ${
+								user?.type === 'admin' && 'mx-auto'
+							}`}>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className=' row row-cols-5 justify-content-evenly g-4'>
+							<div className='row row-cols-5 justify-content-evenly g-4'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
 										<h6
@@ -241,23 +244,28 @@ const Search = () => {
 											key={i}>
 											<span
 												onClick={() => {
-													if (book.sits[item] && !selectedSits.includes(item)) {
-														Swal.fire({
-															title: 'Opps ... ',
-															text: 'This sit is already booked, please select another sit',
-															icon: 'warning',
-															confirmButtonText: 'Ok',
-														});
-													} else {
-														const newBooks = { ...book };
-														newBooks.sits[item] = !newBooks.sits[item];
-														setBook({ ...newBooks });
-														if (selectedSits.includes(item)) {
-															setSelectedSits(
-																selectedSits.filter(i => i !== item)
-															);
+													if (user?.type !== 'admin') {
+														if (
+															book.sits[item] &&
+															!selectedSits.includes(item)
+														) {
+															Swal.fire({
+																title: 'Opps ... ',
+																text: 'This sit is already booked, please select another sit',
+																icon: 'warning',
+																confirmButtonText: 'Ok',
+															});
 														} else {
-															setSelectedSits([...selectedSits, item]);
+															const newBooks = { ...book };
+															newBooks.sits[item] = !newBooks.sits[item];
+															setBook({ ...newBooks });
+															if (selectedSits.includes(item)) {
+																setSelectedSits(
+																	selectedSits.filter(i => i !== item)
+																);
+															} else {
+																setSelectedSits([...selectedSits, item]);
+															}
 														}
 													}
 												}}
@@ -287,142 +295,147 @@ const Search = () => {
 								</div>
 							</div>
 						</div>
-						<div className='col-12 col-md-6'>
-							<form onSubmit={handleBooking}>
-								<div>
-									<label htmlFor='name' className='mb-1'>
-										Name (নাম) <span className='text-danger'>*</span>
-									</label>
-									<input
-										type='text'
-										name='name'
-										required
-										value={booking?.name}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='যাত্রীর নাম'
-									/>
-								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										From (থেকে) <span className='text-danger'>*</span>
-									</label>
-									<input
-										type='text'
-										name='from'
-										required
-										value={booking?.from}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='যাত্রা শুরু করার স্থান'
-									/>
-								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										To (পর্যন্ত) <span className='text-danger'>*</span>
-									</label>
-									<input
-										type='text'
-										name='to'
-										required
-										value={booking?.to}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='যাত্রা শেষ করার স্থান'
-									/>
-								</div>
 
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										Charge(ভাড়া) <span className='text-danger'>*</span>
-									</label>
-									<input
-										type='number'
-										name='charge'
-										required
-										value={booking?.charge}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='প্রতি সিট এর ভাড়া ?'
-									/>
-								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										Commission (কমিশন)
-									</label>
-									<input
-										type='number'
-										name='commission'
-										value={booking?.commission}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='কমিশন পরিমাণ ?'
-									/>
-								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										Chada (চাঁদা)
-									</label>
-									<input
-										type='number'
-										name='chada'
-										value={booking?.chada}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='চাঁদা পরিমাণ ?'
-									/>
-								</div>
-								<div className='my-2'>
-									<label htmlFor='name' className='mb-1'>
-										Other Charge
-									</label>
-									<input
-										type='number'
-										name='otherCharge'
-										value={booking?.otherCharge}
-										onChange={handleChange}
-										className='form-control'
-										placeholder='অন্যান্য খরচ ?'
-									/>
-								</div>
-								<div className='my-2'>
-									<p className='mb-1'>Selected Sits</p>
-									{selectedSits.length > 0 &&
-										selectedSits.map((item, index) => (
-											<span key={index} className=''>
-												{item},{' '}
-											</span>
-										))}
-								</div>
+						{user && user.type !== 'admin' ? (
+							<div className='col-12 col-md-6'>
+								<form onSubmit={handleBooking}>
+									<div>
+										<label htmlFor='name' className='mb-1'>
+											Name (নাম) <span className='text-danger'>*</span>
+										</label>
+										<input
+											type='text'
+											name='name'
+											required
+											value={booking?.name}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='যাত্রীর নাম'
+										/>
+									</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											From (থেকে) <span className='text-danger'>*</span>
+										</label>
+										<input
+											type='text'
+											name='from'
+											required
+											value={booking?.from}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='যাত্রা শুরু করার স্থান'
+										/>
+									</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											To (পর্যন্ত) <span className='text-danger'>*</span>
+										</label>
+										<input
+											type='text'
+											name='to'
+											required
+											value={booking?.to}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='যাত্রা শেষ করার স্থান'
+										/>
+									</div>
 
-								<div className='mt-4 border border-2 p-2'>
-									<p className='mb-1'>
-										Total Amount({selectedSits.length} * {booking?.charge}) :
-										&#2547;{' '}
-										{(booking && selectedSits.length * booking.charge) || 0}
-									</p>
-									<p className='mb-1'>
-										Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
-										{parseFloat(booking?.chada) || 0} -{' '}
-										{parseFloat(booking?.commission) || 0} -{' '}
-										{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
-										{(booking &&
-											selectedSits.length * booking.charge -
-												(parseFloat(booking.chada || 0) +
-													parseFloat(booking.commission || 0) +
-													parseFloat(booking.otherCharge || 0))) ||
-											0}
-									</p>
-								</div>
-								<div className='my-2'>
-									<button
-										type='submit'
-										className='btn btn-success btn-gradient form-control'>
-										Book Now
-									</button>
-								</div>
-							</form>
-						</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											Charge(ভাড়া) <span className='text-danger'>*</span>
+										</label>
+										<input
+											type='number'
+											name='charge'
+											required
+											value={booking?.charge}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='প্রতি সিট এর ভাড়া ?'
+										/>
+									</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											Commission (কমিশন)
+										</label>
+										<input
+											type='number'
+											name='commission'
+											value={booking?.commission}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='কমিশন পরিমাণ ?'
+										/>
+									</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											Chada (চাঁদা)
+										</label>
+										<input
+											type='number'
+											name='chada'
+											value={booking?.chada}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='চাঁদা পরিমাণ ?'
+										/>
+									</div>
+									<div className='my-2'>
+										<label htmlFor='name' className='mb-1'>
+											Other Charge
+										</label>
+										<input
+											type='number'
+											name='otherCharge'
+											value={booking?.otherCharge}
+											onChange={handleChange}
+											className='form-control'
+											placeholder='অন্যান্য খরচ ?'
+										/>
+									</div>
+									<div className='my-2'>
+										<p className='mb-1'>Selected Sits</p>
+										{selectedSits.length > 0 &&
+											selectedSits.map((item, index) => (
+												<span key={index} className=''>
+													{item},{' '}
+												</span>
+											))}
+									</div>
+
+									<div className='mt-4 border border-2 p-2'>
+										<p className='mb-1'>
+											Total Amount({selectedSits.length} * {booking?.charge}) :
+											&#2547;{' '}
+											{(booking && selectedSits.length * booking.charge) || 0}
+										</p>
+										<p className='mb-1'>
+											Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
+											{parseFloat(booking?.chada) || 0} -{' '}
+											{parseFloat(booking?.commission) || 0} -{' '}
+											{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
+											{(booking &&
+												selectedSits.length * booking.charge -
+													(parseFloat(booking.chada || 0) +
+														parseFloat(booking.commission || 0) +
+														parseFloat(booking.otherCharge || 0))) ||
+												0}
+										</p>
+									</div>
+									<div className='my-2'>
+										<button
+											type='submit'
+											className='btn btn-success btn-gradient form-control'>
+											Book Now
+										</button>
+									</div>
+								</form>
+							</div>
+						) : (
+							''
+						)}
 
 						<BookingInfo book={book} date={searchTrips.date} />
 					</div>
