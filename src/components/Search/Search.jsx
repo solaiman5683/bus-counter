@@ -80,7 +80,7 @@ const Search = () => {
 			sits: book.sits,
 			charge: booking.charge,
 			commission: booking.commission,
-			chada: booking.chada,
+			// chada: booking.chada,
 			other_charges: booking.otherCharge,
 			total: selectedSits.length * parseFloat(booking.charge),
 			grand_total:
@@ -200,7 +200,7 @@ const Search = () => {
 													setBook(trip);
 												}}
 												className='btn btn-primary'>
-												Book
+												View
 											</span>
 										</td>
 									</tr>
@@ -368,7 +368,7 @@ const Search = () => {
 											placeholder='কমিশন পরিমাণ ?'
 										/>
 									</div>
-									<div className='my-2'>
+									{/* <div className='my-2'>
 										<label htmlFor='name' className='mb-1'>
 											Chada (চাঁদা)
 										</label>
@@ -380,7 +380,7 @@ const Search = () => {
 											className='form-control'
 											placeholder='চাঁদা পরিমাণ ?'
 										/>
-									</div>
+									</div> */}
 									<div className='my-2'>
 										<label htmlFor='name' className='mb-1'>
 											Other Charge
@@ -412,13 +412,11 @@ const Search = () => {
 										</p>
 										<p className='mb-1'>
 											Grand Total({selectedSits.length * booking?.charge || 0} -{' '}
-											{parseFloat(booking?.chada) || 0} -{' '}
 											{parseFloat(booking?.commission) || 0} -{' '}
 											{parseFloat(booking?.otherCharge) || 0}) : &#2547;{' '}
 											{(booking &&
 												selectedSits.length * booking.charge -
-													(parseFloat(booking.chada || 0) +
-														parseFloat(booking.commission || 0) +
+													(parseFloat(booking.commission || 0) +
 														parseFloat(booking.otherCharge || 0))) ||
 												0}
 										</p>

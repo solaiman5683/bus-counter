@@ -42,7 +42,7 @@ const BookingInfo = ({ book, date }) => {
 												<span key={index}>{sit}, </span>
 											))}
 										</td>
-										<td>{date.total}</td>
+										<td>{date.grand_total}</td>
 									</tr>
 								))}
 						</tbody>
