@@ -229,11 +229,11 @@ const Search = () => {
 								user?.type === 'admin' && 'mx-auto'
 							}`}>
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
-							<div className='row row-cols-5 justify-content-evenly g-4'>
+							<div className='row row-cols-5 justify-content-evenly g-0'>
 								{book &&
 									Object.keys(book.sits).map((item, i) => (
 										<h6
-											className={`text-center p-2 ${
+											className={`text-center p-1 ${
 												[
 													2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50,
 												].includes(i + 1)
@@ -270,7 +270,12 @@ const Search = () => {
 												}}
 												className={`${book.sits[item] && 'sit-active'} ${
 													selectedSits.includes(item) && 'sit-selected'
-												} p-3 text-white sit-item pointer`}>
+													} p-3 text-white sit-item pointer`}
+												style={{
+													width: '100%',
+													display: 'block',
+													}}
+											>
 												{item}
 											</span>
 										</h6>
