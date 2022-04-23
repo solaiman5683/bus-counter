@@ -35,7 +35,7 @@ const Dashboard = () => {
 								</li>
 								<li className='nav-item'>
 									<Link to='manage-trips' className='nav-link'>
-										<i class='fa-solid fa-globe mr-2'></i> Manage Trips
+										<i className='fa-solid fa-globe mr-2'></i> Manage Trips
 									</Link>
 								</li>
 								<li className='nav-item'>
@@ -53,7 +53,7 @@ const Dashboard = () => {
 							<ul className='nav ms-2 d-flex d-lg-none'>
 								<li className='nav-item'>
 									<Link to='manage-trips' className='nav-link'>
-										<i class='fa-solid fa-globe mr-2'></i> Manage Trips
+										<i className='fa-solid fa-globe mr-2'></i> Manage Trips
 									</Link>
 								</li>
 								<li className='nav-item'>

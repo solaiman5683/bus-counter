@@ -7,7 +7,7 @@ const ManageTrips = () => {
 	const [dateModalShow, setDateModalShow] = React.useState(false);
 	const [trips, setTrips] = React.useState([]);
 	const [dateTrip, setDateTrip] = React.useState([]);
-	
+
 	const handleAddTripsToDate = e => {
 		e.preventDefault();
 		function tConvert(time) {
@@ -125,6 +125,39 @@ const ManageTrips = () => {
 			}
 		});
 	};
+	const handleDeleteTrip = id => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, delete it!',
+			confirmButtonColor: 'red',
+			cancelButtonText: 'No, keep it',
+		}).then(result => {
+			if (result.value) {
+				fetch(
+					`https://tranquil-wildwood-98525.herokuapp.com/trips/delete/${id}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				)
+					.then(res => res.json())
+					.then(data => {
+						const newTrips = trips.filter(item => item._id !== id);
+						setTrips(newTrips);
+						Swal.fire({
+							title: 'Deleted!',
+							text: 'Your file has been deleted.',
+							icon: 'success',
+						});
+					});
+			}
+		});
+	};
 
 	React.useEffect(() => {
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/all')
@@ -157,7 +190,35 @@ const ManageTrips = () => {
 					</button>
 				</p>
 				<div className='table-responsive'>
-					<table class='table table-hover-striped'>
+					<table className='table table-hover-striped'>
+						<thead>
+							<tr>
+								<th scope='col'>#</th>
+								<th scope='col'>Trips</th>
+								<th scope='col' className='d-flex justify-content-end pe-4'>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{trips.map((trip, index) => (
+								<tr key={index}>
+									<th scope='row'>{index + 1}</th>
+									<td>
+										<li>{trip.trip_name}</li>
+									</td>
+									<td className='d-flex justify-content-end'>
+										<button
+											onClick={() => handleDeleteTrip(trip._id)}
+											className='btn btn-danger rounded-pill mx-2'>
+											Delete
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+				<div className='table-responsive'>
+					<table className='table table-hover-striped'>
 						<thead>
 							<tr>
 								<th scope='col'>#</th>

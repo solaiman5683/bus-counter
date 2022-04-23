@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import { useData } from '../../Contexts/DataContext';
 import { useAuth } from '../../Contexts/AdminContext';
+import { useData } from '../../Contexts/DataContext';
 import Navbar from '../Navbar/Navbar';
 import BookingInfo from './BookingInfo';
 import styles from './style.module.css';
@@ -177,7 +177,7 @@ const Search = () => {
 						</div>
 					</div>
 				) : search && search?.trip?.length > 0 ? (
-					<table class='table table-striped table-hover mt-5'>
+					<table className='table table-striped table-hover mt-5'>
 						<thead>
 							<tr>
 								<th scope='col'>#id</th>

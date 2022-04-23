@@ -51,9 +51,10 @@ const ManageBookings = () => {
 	return (
 		<>
 			<div className='bg-blur shadow-lg rounded p-4'>
+				
 				<h2 className='text-center mb-4'>Manage Bookings</h2>
 				<div className='table-responsive'>
-					<table class='table table-hover border-secondary'>
+					<table className='table table-hover border-secondary'>
 						<thead>
 							<tr>
 								<th scope='col'>#</th>

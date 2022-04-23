@@ -8,9 +8,7 @@ const Admin = () => {
 	const { user, setUser } = useAuth();
 
 	if (user) {
-		return (
-			<Navigate to='/' />
-		);
+		return <Navigate to='/' />;
 	}
 
 	const handleLogin = e => {
@@ -27,13 +25,29 @@ const Admin = () => {
 		})
 			.then(res => res.json())
 			.then(data => {
-				Swal.fire({
-					title: 'Login Successful!',
-					text: 'Welcome back!',
-					icon: 'success',
-				});
-				setUser(data.user);
-				localStorage.setItem('user', JSON.stringify(data.user));
+				console.log(data);
+				if (data.message === 'User does not exist') {
+					Swal.fire({
+						title: 'Error',
+						text: 'User does not exist',
+						icon: 'error',
+					});
+				console.log(data);
+				} else if (data.message === 'Incorrect password') {
+					Swal.fire({
+						title: 'Error',
+						text: 'Incorrect password',
+						icon: 'error',
+					});
+				} else {
+					Swal.fire({
+						title: 'Login Successful!',
+						text: 'Welcome back!',
+						icon: 'success',
+					});
+					setUser(data.user);
+					localStorage.setItem('user', JSON.stringify(data.user));
+				}
 			})
 			.catch(err => {
 				Swal.fire({
@@ -41,8 +55,7 @@ const Admin = () => {
 					text: 'Please check your email and password.',
 					icon: 'error',
 				});
-			}
-			);
+			});
 	};
 	return (
 		<div className={styles.container}>
