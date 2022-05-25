@@ -13,7 +13,7 @@ const ManageBookings = () => {
 			.catch(err => console.log(err));
 	}, []);
 
-	const handleDelete = id => {
+	const handleDelete = data => {
 		Swal.fire({
 			title: 'Are you sure?',
 			text: "You won't be able to revert this!",
@@ -26,17 +26,18 @@ const ManageBookings = () => {
 		}).then(result => {
 			if (result.value) {
 				fetch(
-					`https://tranquil-wildwood-98525.herokuapp.com/booking/delete/${id}`,
+					`https://tranquil-wildwood-98525.herokuapp.com/booking/delete/${data._id}`,
 					{
 						method: 'DELETE',
 						headers: {
 							'Content-Type': 'application/json',
 						},
+						body: JSON.stringify(data),
 					}
 				)
 					.then(res => res.json())
 					.then(data => {
-						const newBookings = bookings.filter(item => item._id !== id);
+						const newBookings = bookings.filter(item => item._id !== data._id);
 						setBookings(newBookings);
 						Swal.fire({
 							title: 'Deleted!',
@@ -90,7 +91,7 @@ const ManageBookings = () => {
 										<td>{date.grand_total}</td>
 										<td>
 											<button
-												onClick={() => handleDelete(date._id)}
+												onClick={() => handleDelete(date)}
 												className='btn btn-danger rounded-pill mx-2'>
 												Delete
 											</button>
