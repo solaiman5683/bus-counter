@@ -25,24 +25,29 @@ const Search = () => {
 			})
 			.catch(err => console.log(err));
 
-		fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/get/date', {
-			method: 'post',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				trip_date: searchTrips.date,
-				trip_name: searchTrips.trip,
-			}),
-		})
-			.then(res => res.json())
-			.then(data => {
-				setSearch(data);
-				setLoading(false);
+		if (searchTrips.date) {
+			fetch('https://tranquil-wildwood-98525.herokuapp.com/trips/get/date', {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					trip_date: searchTrips.date,
+					trip_name: searchTrips.trip,
+				}),
 			})
-			.catch(err => {
-				setLoading(false);
-			});
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+					setSearch(data[0]);
+					setLoading(false);
+				})
+				.catch(err => {
+					setLoading(false);
+				});
+		} else {
+			setLoading(false);
+		}
 	}, [searchTrips]);
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -176,7 +181,7 @@ const Search = () => {
 							<span className='sr-only'>Loading...</span>
 						</div>
 					</div>
-				) : search && search?.trip?.length > 0 ? (
+				) : search && search?.trips?.length > 0 ? (
 					<table className='table table-striped table-hover mt-5'>
 						<thead>
 							<tr>
@@ -188,7 +193,7 @@ const Search = () => {
 						</thead>
 						<tbody>
 							{search &&
-								search?.trip?.map((trip, i) => (
+								search?.trips?.map((trip, i) => (
 									<tr key={i}>
 										<th scope='row'>{i + 1 < 10 ? `0${i + 1}` : i}</th>
 										<td>{trip.trip_time}</td>
@@ -270,12 +275,11 @@ const Search = () => {
 												}}
 												className={`${book.sits[item] && 'sit-active'} ${
 													selectedSits.includes(item) && 'sit-selected'
-													} p-3 text-white sit-item pointer`}
+												} p-3 text-white sit-item pointer`}
 												style={{
 													width: '100%',
 													display: 'block',
-													}}
-											>
+												}}>
 												{item}
 											</span>
 										</h6>
