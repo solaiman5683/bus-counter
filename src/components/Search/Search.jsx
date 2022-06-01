@@ -12,6 +12,7 @@ const Search = () => {
 	const { searchTrips, setSearchTrips } = useData();
 	const { user } = useAuth();
 	const [search, setSearch] = React.useState(null);
+	const [bookingId, setBookingId] = React.useState(null);
 	const [loading, setLoading] = React.useState(true);
 	const [show, setShow] = React.useState(false);
 	const [book, setBook] = React.useState(null);
@@ -38,8 +39,7 @@ const Search = () => {
 			})
 				.then(res => res.json())
 				.then(data => {
-					console.log(data);
-					setSearch(data[0]);
+					setSearch(data);
 					setLoading(false);
 				})
 				.catch(err => {
@@ -93,7 +93,7 @@ const Search = () => {
 				(parseFloat(booking.otherCharge || 0) +
 					parseFloat(booking.chada || 0) +
 					parseFloat(booking.commission || 0)),
-			trip_id: search._id,
+			trip_id: bookingId,
 		};
 		fetch('https://tranquil-wildwood-98525.herokuapp.com/booking/add/', {
 			method: 'post',
@@ -181,7 +181,7 @@ const Search = () => {
 							<span className='sr-only'>Loading...</span>
 						</div>
 					</div>
-				) : search && search?.trips?.length > 0 ? (
+				) : search && search?.length > 0 ? (
 					<table className='table table-striped table-hover mt-5'>
 						<thead>
 							<tr>
@@ -193,20 +193,37 @@ const Search = () => {
 						</thead>
 						<tbody>
 							{search &&
-								search?.trips?.map((trip, i) => (
+								search?.map((trip, i) => (
 									<tr key={i}>
 										<th scope='row'>{i + 1 < 10 ? `0${i + 1}` : i}</th>
-										<td>{trip.trip_time}</td>
-										<td>{trip.trip_name}</td>
 										<td>
-											<span
-												onClick={() => {
-													setShow(true);
-													setBook(trip);
-												}}
-												className='btn btn-primary'>
-												View
-											</span>
+											<ul style={{ listStyle: 'none' }}>
+												{trip.trips.map(item => {
+													return <li key={item._id}>{item.trip_time}</li>;
+												})}
+											</ul>
+										</td>
+										<td>
+											<ul style={{ listStyle: 'none' }}>
+												{trip.trips.map(item => {
+													return <li key={item._id}>{item.trip_name}</li>;
+												})}
+											</ul>
+										</td>
+										<td>
+											{trip.trips.map(item => {
+												return (
+													<span
+														onClick={() => {
+															setShow(true);
+															setBook(item);
+															setBookingId(trip._id);
+														}}
+														className='btn btn-primary'>
+														View
+													</span>
+												);
+											})}
 										</td>
 									</tr>
 								))}
@@ -236,7 +253,7 @@ const Search = () => {
 							<h5 className='mb-4'>Bus Sit Plan - Select sit you want</h5>
 							<div className='row row-cols-5 justify-content-evenly g-0'>
 								{book &&
-									Object.keys(book.sits).map((item, i) => (
+									Object?.keys(book.sits).map((item, i) => (
 										<h6
 											className={`text-center p-1 ${
 												[

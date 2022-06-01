@@ -30,7 +30,7 @@ const ManageTrips = () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				trip_name: e.target.trip.value,
+				// trip_name: e.target.trip.value,
 				trip_time: tConvert(e.target.time.value),
 				trip_date: e.target.date.value,
 			}),
@@ -186,7 +186,7 @@ const ManageTrips = () => {
 					<button
 						className='btn btn-primary rounded-pill m-2'
 						onClick={() => setDateModalShow(true)}>
-						Add Trips to Date
+						Add Time Slot
 					</button>
 				</p>
 				<div className='table-responsive'>
@@ -292,7 +292,7 @@ const ManageTrips = () => {
 				centered>
 				<Modal.Header closeButton>
 					<Modal.Title id='contained-modal-title-vcenter'>
-						Add Trips to Date
+						Add Time Slot
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -312,7 +312,7 @@ const ManageTrips = () => {
 							className='form-control'
 							required
 						/>
-						<br />
+						{/* <br />
 						<select name='trip' className='form-control' required>
 							<option
 								hidden
@@ -326,7 +326,7 @@ const ManageTrips = () => {
 									{trip.trip_name}
 								</option>
 							))}
-						</select>
+						</select> */}
 
 						<button className='btn btn-primary text-uppercase form-control mt-4'>
 							Add
